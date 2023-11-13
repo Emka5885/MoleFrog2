@@ -42,7 +42,7 @@ void RenderTerminate()
 
 void RenderBackground()
 {
-	SDL_SetRenderDrawColor(GetRenderer(), 130, 130, 130, 255);
+	SDL_SetRenderDrawColor(GetRenderer(), 255, 255, 255, 255);
 	SDL_RenderPresent(GetRenderer());
 	SDL_RenderClear(GetRenderer());
 }
@@ -59,4 +59,34 @@ void DrawShape(SDL_Color color, int positionX, int positionY, int sizeX, int siz
 	SDL_Rect rect = { positionX, positionY, sizeX, sizeY };
 	SDL_SetRenderDrawColor(GetRenderer(), color.r, color.g, color.b, color.a);
 	SDL_RenderFillRect(GetRenderer(), &rect);
+}
+
+void DrawText(TTF_Font* font, SDL_Color fontColor, SDL_Color fontOutlineColor, std::string text, int x, int y)
+{
+	char character;
+	int textWidth = 0;
+	for (int i = text.size() - 1; i >= 0; i--)
+	{
+		SDL_Surface* surf;
+		SDL_Texture* tex;
+		SDL_Rect rect;
+
+		character = text[i];
+		std::string mark;
+		mark += character;
+		const char* st = mark.c_str();
+
+		// basic text
+		surf = TTF_RenderText_Solid(font, st, fontColor);
+		tex = SDL_CreateTextureFromSurface(GetRenderer(), surf);
+		rect.x = x - surf->w - textWidth;
+		rect.y = y;
+		rect.w = surf->w;
+		rect.h = surf->h;
+		SDL_RenderCopy(GetRenderer(), tex, NULL, &rect);
+		textWidth += surf->w + 2;
+
+		SDL_FreeSurface(surf);
+		SDL_DestroyTexture(tex);
+	}
 }

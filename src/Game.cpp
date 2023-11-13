@@ -7,7 +7,21 @@
 
 Game::Game()
 {
+	//SDL Init
+	int result = SDL_Init(SDL_INIT_VIDEO);
+	assert(result == 0 && "SDL could not initialize!");
+	//TTF Init
+	result = TTF_Init();
+	assert(result == 0 && "Font could not initialize!");
+	//SDL_Image Init
+	int imgFlags = IMG_INIT_PNG;
+	int imgInitResult = IMG_Init(imgFlags);
+	assert((imgInitResult & imgFlags) == imgFlags && "SDL_Image could not initialize!");
+
 	assets = new AssetManager();
+	input = new InputManager();
+	fireButton = new Button({150,75}, {WIDTH - 200, HEIGHT - 100}, {255,255,255,255}, { 0,0,0,255 }, "Fire!  ");
+
 	Init();
 }
 
@@ -23,16 +37,6 @@ void Game::Init()
 {
 	srand(time(NULL));
 
-	//SDL Init
-	int result = SDL_Init(SDL_INIT_VIDEO);
-	assert(result == 0 && "SDL could not initialize!");
-	//TTF Init
-	result = TTF_Init();
-	assert(result == 0 && "Font could not initialize!");
-	//SDL_Image Init
-	int imgFlags = IMG_INIT_PNG;
-	int imgInitResult = IMG_Init(imgFlags);
-	assert((imgInitResult & imgFlags) == imgFlags && "SDL_Image could not initialize!");
 	//Render Init
 	RenderInit();
 }
@@ -76,8 +80,15 @@ void Game::Input()
 				quitt = true;
 			}
 			break;
+		case SDL_MOUSEBUTTONDOWN:
+			if (event.button.button == SDL_BUTTON_LEFT)
+			{
+				fireButton->CheckIfClicked(input->GetMousePosition());
+			}
+			break;
 		}
 	}
+	fireButton->CheckIfHovered(input->GetMousePosition());
 }
 
 void Game::Update()
@@ -87,4 +98,6 @@ void Game::Update()
 void Game::Draw()
 {
 	RenderBackground();
+	DrawShape({ 0,0,0,255 }, 0, HEIGHT - 200, WIDTH, 10);
+	fireButton->Draw(assets);
 }

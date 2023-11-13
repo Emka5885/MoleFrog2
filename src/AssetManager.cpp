@@ -1,5 +1,6 @@
 #include "AssetManager.h"
 #include "Render.h"
+#include "Definitions.h"
 
 AssetManager::AssetManager()
 {
@@ -13,6 +14,7 @@ void AssetManager::InitTextures()
 
 void AssetManager::InitFonts()
 {
+	LoadFont(FONT, FONT_PATH, 40);
 }
 
 void AssetManager::LoadTexture(const char* name, const char* fileName)
