@@ -1,0 +1,54 @@
+#include "AssetManager.h"
+#include "Render.h"
+
+AssetManager::AssetManager()
+{
+	InitTextures();
+	InitFonts();
+}
+
+void AssetManager::InitTextures()
+{
+}
+
+void AssetManager::InitFonts()
+{
+}
+
+void AssetManager::LoadTexture(const char* name, const char* fileName)
+{
+	SDL_Texture* tex;
+	SDL_Surface* surf = IMG_Load(fileName);
+
+	assert(surf != nullptr && "Texture could not be created!");
+
+	tex = SDL_CreateTextureFromSurface(GetRenderer(), surf);
+
+	if (tex != nullptr)
+	{
+		textures[name] = tex;
+	}
+	SDL_FreeSurface(surf);
+}
+
+SDL_Texture* AssetManager::GetTexture(const char* name)
+{
+	return this->textures.at(name);
+}
+
+void AssetManager::LoadFont(const char* name, const char* fileName, int fontSize)
+{
+	TTF_Font* font = TTF_OpenFont(fileName, fontSize);
+
+	assert(font != nullptr && "Font could not be created!");
+	
+	if (font != nullptr)
+	{
+		fonts[name] = font;
+	}
+}
+
+TTF_Font* AssetManager::GetFont(const char* name)
+{
+	return this->fonts.at(name);
+}
