@@ -20,7 +20,8 @@ Game::Game()
 
 	assets = new AssetManager();
 	input = new InputManager();
-	fireButton = new Button({150,75}, {WIDTH - 200, HEIGHT - 100}, {255,255,255,255}, { 0,0,0,255 }, "Fire!  ");
+	cannon = new Cannon(assets->GetTexture(CANNON));
+	fireButton = new Button({150,75}, {WIDTH - 200, HEIGHT - 100}, {255,255,255,255}, { 0,0,0,255 }, "FIRE!");
 
 	Init();
 }
@@ -37,7 +38,6 @@ void Game::Init()
 {
 	srand(time(NULL));
 
-	//Render Init
 	RenderInit();
 }
 
@@ -98,6 +98,7 @@ void Game::Update()
 void Game::Draw()
 {
 	RenderBackground();
-	DrawShape({ 0,0,0,255 }, 0, HEIGHT - 200, WIDTH, 10);
+	DrawShape({ 0,0,0,255 }, 0, HEIGHT - 200, WIDTH, 8);
+	cannon->Draw();
 	fireButton->Draw(assets);
 }

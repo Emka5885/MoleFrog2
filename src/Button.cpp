@@ -97,7 +97,9 @@ void Button::Draw(AssetManager* assets)
 	DrawShape(GetCurrentColor(), GetCurrentPosition().x, GetCurrentPosition().y, GetCurrentSize().x, GetCurrentSize().y);
 	if (buttonText != "")
 	{
-		DrawText(assets->GetFont(FONT), { 255,0,0,255 }, { 0,0,0,255 }, buttonText, GetCurrentPosition().x + GetCurrentSize().x, GetCurrentPosition().y + outline / 2 - 20 + GetCurrentSize().y / 2);
+		int textPosX = GetCurrentPosition().x + GetCurrentSize().x / 2 + outline / 2;
+		int textPosY = GetCurrentPosition().y + GetCurrentSize().y / 2 + outline / 2;
+		DrawText(assets->GetFont(FONT), { 255,0,0,255 }, { 0,0,0,255 }, buttonText, textPosX, textPosY);
 	}
 }
 

@@ -3,6 +3,7 @@
 #include "AssetManager.h"
 #include "InputManager.h"
 #include "Button.h"
+#include "Cannon.h"
 
 class Game
 {
@@ -19,6 +20,7 @@ private:
 	AssetManager* assets;
 	InputManager* input;
 
+	Cannon* cannon;
 	Button* fireButton;
 
 	bool quitt = false;

@@ -8,8 +8,11 @@ SDL_Window* GetWindow()
 
 	if (!window)
 	{
-		window = SDL_CreateWindow("MoleFrog", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+		window = SDL_CreateWindow("MoleFrog2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 		assert(window != nullptr && "Window could not be created!");
+
+		SDL_Surface* surf = IMG_Load(ICON_PATH);
+		SDL_SetWindowIcon(GetWindow(), surf);
 	}
 
 	return window;
@@ -63,30 +66,20 @@ void DrawShape(SDL_Color color, int positionX, int positionY, int sizeX, int siz
 
 void DrawText(TTF_Font* font, SDL_Color fontColor, SDL_Color fontOutlineColor, std::string text, int x, int y)
 {
-	char character;
-	int textWidth = 0;
-	for (int i = text.size() - 1; i >= 0; i--)
-	{
-		SDL_Surface* surf;
-		SDL_Texture* tex;
-		SDL_Rect rect;
+	SDL_Surface* surf;
+	SDL_Texture* tex;
+	SDL_Rect rect;
 
-		character = text[i];
-		std::string mark;
-		mark += character;
-		const char* st = mark.c_str();
+	const char* st = text.c_str();
 
-		// basic text
-		surf = TTF_RenderText_Solid(font, st, fontColor);
-		tex = SDL_CreateTextureFromSurface(GetRenderer(), surf);
-		rect.x = x - surf->w - textWidth;
-		rect.y = y;
-		rect.w = surf->w;
-		rect.h = surf->h;
-		SDL_RenderCopy(GetRenderer(), tex, NULL, &rect);
-		textWidth += surf->w + 2;
+	surf = TTF_RenderText_Solid(font, st, fontColor);
+	tex = SDL_CreateTextureFromSurface(GetRenderer(), surf);
+	rect.x = x - surf->w / 2;
+	rect.y = y - surf->h / 2;
+	rect.w = surf->w;
+	rect.h = surf->h;
+	SDL_RenderCopy(GetRenderer(), tex, NULL, &rect);
 
-		SDL_FreeSurface(surf);
-		SDL_DestroyTexture(tex);
-	}
+	SDL_FreeSurface(surf);
+	SDL_DestroyTexture(tex);
 }

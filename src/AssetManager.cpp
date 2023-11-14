@@ -10,6 +10,7 @@ AssetManager::AssetManager()
 
 void AssetManager::InitTextures()
 {
+	LoadTexture(CANNON, CANNON_PATH);
 }
 
 void AssetManager::InitFonts()
