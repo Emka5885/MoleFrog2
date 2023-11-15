@@ -4,6 +4,7 @@
 #include "InputManager.h"
 #include "Button.h"
 #include "Cannon.h"
+#include "Data.h"
 
 class Game
 {
@@ -22,6 +23,8 @@ private:
 
 	Cannon* cannon;
 	Button* fireButton;
+
+	std::vector<Data*> data;
 
 	bool quitt = false;
 };

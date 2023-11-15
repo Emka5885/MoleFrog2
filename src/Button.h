@@ -20,12 +20,12 @@ private:
 	Vector2 unhoverPosition;
 	Vector2 hoverPosition;
 	ButtonTypes buttonType;
-	std::string buttonText;
+	const char* buttonText;
 
 	Collider* collider;
 
 public:
-	Button(Vector2 unhoverSize, Vector2 unhoverPosition, SDL_Color unhoverColor, SDL_Color outlineColor, std::string buttonText, int zoom = 4);
+	Button(Vector2 unhoverSize, Vector2 unhoverPosition, SDL_Color unhoverColor, SDL_Color outlineColor, const char* buttonText, int zoom = 4);
 
 	void Init(int zoom);
 	void CheckIfClicked(Vector2 mousePos);

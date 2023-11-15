@@ -21,7 +21,7 @@ Game::Game()
 	assets = new AssetManager();
 	input = new InputManager();
 	cannon = new Cannon(assets->GetTexture(CANNON));
-	fireButton = new Button({150,75}, {WIDTH - 200, HEIGHT - 100}, {255,255,255,255}, { 0,0,0,255 }, "FIRE!");
+	fireButton = new Button({150,75}, {WIDTH - 200, HEIGHT - 90}, {255,255,255,255}, { 0,0,0,255 }, "FIRE!");
 
 	Init();
 }
@@ -37,6 +37,15 @@ Game::~Game()
 void Game::Init()
 {
 	srand(time(NULL));
+
+	Data* d = new Data("Angle", 1, 89, 10, HEIGHT - 140);
+	data.emplace_back(d);
+	d = new Data("Initial Speed", 0, 100, 10, HEIGHT - 80, "m/s");
+	data.emplace_back(d);
+	d = new Data("Gravity", 0, 100, WIDTH / 2 - 100, HEIGHT - 140, "m/s^2");
+	data.emplace_back(d);
+	d = new Data("Air Drag", 0, 100, WIDTH / 2 - 100, HEIGHT - 80, "m/s^2");
+	data.emplace_back(d);
 
 	RenderInit();
 }
@@ -98,7 +107,11 @@ void Game::Update()
 void Game::Draw()
 {
 	RenderBackground();
-	DrawShape({ 0,0,0,255 }, 0, HEIGHT - 200, WIDTH, 8);
+	DrawShape({ 0,0,0,255 }, 0, HEIGHT - 175, WIDTH, 8);
 	cannon->Draw();
 	fireButton->Draw(assets);
+	for (int i = 0; i < data.size(); i++)
+	{
+		data[i]->Draw(assets);
+	}
 }

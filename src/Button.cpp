@@ -2,9 +2,8 @@
 #include <algorithm>
 #include "Definitions.h"
 #include "Render.h"
-#include <iostream>
 
-Button::Button(Vector2 unhoverSize, Vector2 unhoverPosition, SDL_Color unhoverColor, SDL_Color outlineColor, std::string buttonText, int zoom) : unhoverSize(unhoverSize), unhoverPosition(unhoverPosition), unhoverColor(unhoverColor), outlineColor(outlineColor), buttonText(buttonText)
+Button::Button(Vector2 unhoverSize, Vector2 unhoverPosition, SDL_Color unhoverColor, SDL_Color outlineColor, const char* buttonText, int zoom) : unhoverSize(unhoverSize), unhoverPosition(unhoverPosition), unhoverColor(unhoverColor), outlineColor(outlineColor), buttonText(buttonText)
 {
 	collider = new Collider();
 	Init(zoom);
@@ -99,7 +98,7 @@ void Button::Draw(AssetManager* assets)
 	{
 		int textPosX = GetCurrentPosition().x + GetCurrentSize().x / 2 + outline / 2;
 		int textPosY = GetCurrentPosition().y + GetCurrentSize().y / 2 + outline / 2;
-		DrawText(assets->GetFont(FONT), { 255,0,0,255 }, { 0,0,0,255 }, buttonText, textPosX, textPosY);
+		DrawTextForButtons(assets->GetFont(FIRE_FONT), { 255,0,0,255 }, buttonText, textPosX, textPosY);
 	}
 }
 

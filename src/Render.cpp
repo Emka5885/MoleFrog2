@@ -64,15 +64,31 @@ void DrawShape(SDL_Color color, int positionX, int positionY, int sizeX, int siz
 	SDL_RenderFillRect(GetRenderer(), &rect);
 }
 
-void DrawText(TTF_Font* font, SDL_Color fontColor, SDL_Color fontOutlineColor, std::string text, int x, int y)
+void DrawText(TTF_Font* font, SDL_Color fontColor, const char* text, int x, int y)
 {
 	SDL_Surface* surf;
 	SDL_Texture* tex;
 	SDL_Rect rect;
 
-	const char* st = text.c_str();
+	surf = TTF_RenderText_Solid(font, text, fontColor);
+	tex = SDL_CreateTextureFromSurface(GetRenderer(), surf);
+	rect.x = x;
+	rect.y = y;
+	rect.w = surf->w;
+	rect.h = surf->h;
+	SDL_RenderCopy(GetRenderer(), tex, NULL, &rect);
 
-	surf = TTF_RenderText_Solid(font, st, fontColor);
+	SDL_FreeSurface(surf);
+	SDL_DestroyTexture(tex);
+}
+
+void DrawTextForButtons(TTF_Font* font, SDL_Color fontColor, const char* text, int x, int y)
+{
+	SDL_Surface* surf;
+	SDL_Texture* tex;
+	SDL_Rect rect;
+
+	surf = TTF_RenderText_Solid(font, text, fontColor);
 	tex = SDL_CreateTextureFromSurface(GetRenderer(), surf);
 	rect.x = x - surf->w / 2;
 	rect.y = y - surf->h / 2;
