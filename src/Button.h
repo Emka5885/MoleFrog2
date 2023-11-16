@@ -23,12 +23,13 @@ private:
 	Vector2 hoverPosition;
 	ButtonTypes buttonType;
 	const char* buttonText;
+	bool changeColorWhenClicked;
 
 	TTF_Font* font;
 	Collider* collider;
 
 public:
-	Button(Vector2 unhoverSize, SDL_Color unhoverColor, SDL_Color outlineColor, SDL_Color fontColor, const char* buttonText, TTF_Font* font, int zoom, Vector2 unhoverPosition = {0,0});
+	Button(Vector2 unhoverSize, SDL_Color unhoverColor, SDL_Color outlineColor, SDL_Color fontColor, const char* buttonText, TTF_Font* font, int zoom, Vector2 unhoverPosition = {0,0}, bool changeColorWhenClicked = false);
 
 	void Init();
 	void CheckIfClicked(Vector2 mousePos);
@@ -38,6 +39,8 @@ public:
 	void SetNewPosition(Vector2 unhoverPosition);
 
 	void Draw();
+
+	bool GetIfClicked(Vector2 mousePos);
 
 	SDL_Color GetCurrentColor();
 	Vector2& GetCurrentPosition();

@@ -6,8 +6,8 @@
 
 Data::Data(AssetManager* assets, const char* dataText, int minValue, int maxValue, int dataPosX, int dataPosY, const char* optionalText) : assets(assets), dataText(dataText), minValue(minValue), maxValue(maxValue), dataPosX(dataPosX), dataPosY(dataPosY), optionalText(optionalText)
 {
-	left = new Button({ 32,32 }, { 255,255,255,255 }, { 0,0,0,255 }, { 0,0,0,255 }, "<", assets->GetFont(FONT), 0);
-	right = new Button({ 32,32 }, { 255,255,255,255 }, { 0,0,0,255 }, { 0,0,0,255 }, ">", assets->GetFont(FONT), 0);
+	left = new Button({ 32,32 }, { 255,255,255,255 }, { 0,0,0,255 }, { 0,0,0,255 }, "<", assets->GetFont(FONT), 2);
+	right = new Button({ 32,32 }, { 255,255,255,255 }, { 0,0,0,255 }, { 0,0,0,255 }, ">", assets->GetFont(FONT), 2);
 	SetNewValue(1);
 }
 
@@ -31,12 +31,30 @@ void Data::DrawData()
 	std::string st = std::string(dataText);
 	if (optionalText != "")
 	{
-		st += " (" + std::string(optionalText) + "):";
+		st += " (" + std::string(optionalText) + ") ";
 	}
 	const char* text = st.c_str();
 	DrawText(assets->GetFont(FONT), { 0,0,0,255 }, text, dataPosX, dataPosY, currentDataTextSize);
 
 	DrawLeft();
+}
+
+void Data::CheckIfButtonsHover(Vector2 mousePos)
+{
+	left->CheckIfHovered(mousePos);
+	right->CheckIfHovered(mousePos);
+}
+
+void Data::CheckToSetNewValue(Vector2 mousePos)
+{
+	if (left->GetIfClicked(mousePos))
+	{
+		SetNewValue(--currentValue);
+	}
+	if (right->GetIfClicked(mousePos))
+	{
+		SetNewValue(++currentValue);
+	}
 }
 
 void Data::DrawLeft()

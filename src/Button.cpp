@@ -3,7 +3,7 @@
 #include "Definitions.h"
 #include "Render.h"
 
-Button::Button(Vector2 unhoverSize, SDL_Color unhoverColor, SDL_Color outlineColor, SDL_Color fontColor, const char* buttonText, TTF_Font* font, int zoom, Vector2 unhoverPosition) : unhoverSize(unhoverSize), unhoverPosition(unhoverPosition), unhoverColor(unhoverColor), outlineColor(outlineColor), fontColor(fontColor), buttonText(buttonText), font(font), zoom(zoom)
+Button::Button(Vector2 unhoverSize, SDL_Color unhoverColor, SDL_Color outlineColor, SDL_Color fontColor, const char* buttonText, TTF_Font* font, int zoom, Vector2 unhoverPosition, bool changeColorWhenClicked) : unhoverSize(unhoverSize), unhoverPosition(unhoverPosition), unhoverColor(unhoverColor), outlineColor(outlineColor), fontColor(fontColor), buttonText(buttonText), font(font), zoom(zoom), changeColorWhenClicked(changeColorWhenClicked)
 {
 	collider = new Collider();
 	Init();
@@ -87,7 +87,7 @@ void Button::ChangeHover()
 
 void Button::SetClicked()
 {
-	if (zoom != 0)
+	if(changeColorWhenClicked)
 		buttonType = clicked;
 }
 
@@ -131,7 +131,7 @@ SDL_Color Button::GetCurrentColor()
 		return hoverColor;
 	}
 
-	if(zoom!=0)
+	if (changeColorWhenClicked)
 		return clickColor;
 }
 
@@ -157,4 +157,14 @@ Vector2& Button::GetCurrentSize()
 	{
 		return hoverSize;
 	}
+}
+
+bool Button::GetIfClicked(Vector2 mousePos)
+{
+	if (collider->CheckCollisionOfObjectAndPoint(rect, mousePos))
+	{
+		SetClicked();
+		return true;
+	}
+	return false;
 }

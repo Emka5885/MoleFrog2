@@ -21,7 +21,7 @@ Game::Game()
 	assets = new AssetManager();
 	input = new InputManager();
 	cannon = new Cannon(assets->GetTexture(CANNON));
-	fireButton = new Button({ 150,75 }, { 255,255,255,255 }, { 0,0,0,255 }, { 255,0,0,255 }, "FIRE!", assets->GetFont(FIRE_FONT), 4, { WIDTH - 200, HEIGHT - 90 });
+	fireButton = new Button({ 150,75 }, { 255,255,255,255 }, { 0,0,0,255 }, { 255,0,0,255 }, "FIRE!", assets->GetFont(FIRE_FONT), 4, { WIDTH - 200, HEIGHT - 90 }, true);
 
 	Init();
 }
@@ -38,13 +38,13 @@ void Game::Init()
 {
 	srand(time(NULL));
 
-	Data* d = new Data(assets, "Angle", 0, 90, 10, HEIGHT - 140, "0 - 90");
+	Data* d = new Data(assets, "Angle", 0, 90, 10, HEIGHT - 140, "in °");
 	data.emplace_back(d);
 	d = new Data(assets, "Initial Speed", 0, 100, 10, HEIGHT - 80, "in m/s");
 	data.emplace_back(d);
-	d = new Data(assets, "Gravity", 0, 100, WIDTH / 2 - 100, HEIGHT - 140, "in m/s^2");
+	d = new Data(assets, "Gravity", 0, 10, WIDTH / 2 - 100, HEIGHT - 140, "in m/s^2");
 	data.emplace_back(d);
-	d = new Data(assets, "Air Drag", 0, 100, WIDTH / 2 - 100, HEIGHT - 80, "in m/s^2");
+	d = new Data(assets, "Air Drag", 0, 10, WIDTH / 2 - 100, HEIGHT - 80, "in m/s^2");
 	data.emplace_back(d);
 
 	RenderInit();
@@ -93,15 +93,36 @@ void Game::Input()
 			if (event.button.button == SDL_BUTTON_LEFT)
 			{
 				fireButton->CheckIfClicked(input->GetMousePosition());
+				mouseButtonClicked = true;
 			}
+			break;
+		case SDL_MOUSEBUTTONUP:
+			mouseButtonClicked = false;
 			break;
 		}
 	}
+
+	if (mouseButtonClicked)
+	{
+		if (delayOfClickedMouseButton <= 0)
+		{
+			for (int i = 0; i < data.size(); i++)
+			{
+				data[i]->CheckToSetNewValue(input->GetMousePosition());
+			}
+
+			delayOfClickedMouseButton = 3;
+		}
+		else
+		{
+			delayOfClickedMouseButton--;
+		}
+	}
+
 	fireButton->CheckIfHovered(input->GetMousePosition());
 	for (int i = 0; i < data.size(); i++)
 	{
-		data[i]->left->CheckIfHovered(input->GetMousePosition());
-		data[i]->right->CheckIfHovered(input->GetMousePosition());
+		data[i]->CheckIfButtonsHover(input->GetMousePosition());
 	}
 }
 

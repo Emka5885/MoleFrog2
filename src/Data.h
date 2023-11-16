@@ -15,6 +15,9 @@ private:
 	int currentDataTextSize;
 	int currentValueTextSize;
 
+	Button* left;
+	Button* right;
+
 	void UpdateLeft();
 	void UpdateRight();
 	void DrawLeft();
@@ -27,6 +30,6 @@ public:
 	void SetNewValue(int newValue);
 	void DrawData();
 
-	Button* left;
-	Button* right;
+	void CheckIfButtonsHover(Vector2 mousePos);
+	void CheckToSetNewValue(Vector2 mousePos);
 };

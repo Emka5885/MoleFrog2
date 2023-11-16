@@ -26,5 +26,7 @@ private:
 
 	std::vector<Data*> data;
 
+	int delayOfClickedMouseButton = 3;
+	bool mouseButtonClicked = false;
 	bool quitt = false;
 };
