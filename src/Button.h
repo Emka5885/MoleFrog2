@@ -9,8 +9,10 @@
 class Button
 {
 private:
+	int zoom;
 	int outline;
 	SDL_Rect rect;
+	SDL_Color fontColor;
 	SDL_Color outlineColor;
 	SDL_Color unhoverColor;
 	SDL_Color hoverColor;
@@ -22,18 +24,20 @@ private:
 	ButtonTypes buttonType;
 	const char* buttonText;
 
+	TTF_Font* font;
 	Collider* collider;
 
 public:
-	Button(Vector2 unhoverSize, Vector2 unhoverPosition, SDL_Color unhoverColor, SDL_Color outlineColor, const char* buttonText, int zoom = 4);
+	Button(Vector2 unhoverSize, SDL_Color unhoverColor, SDL_Color outlineColor, SDL_Color fontColor, const char* buttonText, TTF_Font* font, int zoom, Vector2 unhoverPosition = {0,0});
 
-	void Init(int zoom);
+	void Init();
 	void CheckIfClicked(Vector2 mousePos);
 	void CheckIfHovered(Vector2 mousePos);
 	void ChangeHover();
 	void SetClicked();
+	void SetNewPosition(Vector2 unhoverPosition);
 
-	void Draw(AssetManager* assets);
+	void Draw();
 
 	SDL_Color GetCurrentColor();
 	Vector2& GetCurrentPosition();

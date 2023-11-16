@@ -21,7 +21,7 @@ Game::Game()
 	assets = new AssetManager();
 	input = new InputManager();
 	cannon = new Cannon(assets->GetTexture(CANNON));
-	fireButton = new Button({150,75}, {WIDTH - 200, HEIGHT - 90}, {255,255,255,255}, { 0,0,0,255 }, "FIRE!");
+	fireButton = new Button({ 150,75 }, { 255,255,255,255 }, { 0,0,0,255 }, { 255,0,0,255 }, "FIRE!", assets->GetFont(FIRE_FONT), 4, { WIDTH - 200, HEIGHT - 90 });
 
 	Init();
 }
@@ -38,13 +38,13 @@ void Game::Init()
 {
 	srand(time(NULL));
 
-	Data* d = new Data("Angle", 1, 89, 10, HEIGHT - 140);
+	Data* d = new Data(assets, "Angle", 0, 90, 10, HEIGHT - 140, "0 - 90");
 	data.emplace_back(d);
-	d = new Data("Initial Speed", 0, 100, 10, HEIGHT - 80, "m/s");
+	d = new Data(assets, "Initial Speed", 0, 100, 10, HEIGHT - 80, "in m/s");
 	data.emplace_back(d);
-	d = new Data("Gravity", 0, 100, WIDTH / 2 - 100, HEIGHT - 140, "m/s^2");
+	d = new Data(assets, "Gravity", 0, 100, WIDTH / 2 - 100, HEIGHT - 140, "in m/s^2");
 	data.emplace_back(d);
-	d = new Data("Air Drag", 0, 100, WIDTH / 2 - 100, HEIGHT - 80, "m/s^2");
+	d = new Data(assets, "Air Drag", 0, 100, WIDTH / 2 - 100, HEIGHT - 80, "in m/s^2");
 	data.emplace_back(d);
 
 	RenderInit();
@@ -98,6 +98,11 @@ void Game::Input()
 		}
 	}
 	fireButton->CheckIfHovered(input->GetMousePosition());
+	for (int i = 0; i < data.size(); i++)
+	{
+		data[i]->left->CheckIfHovered(input->GetMousePosition());
+		data[i]->right->CheckIfHovered(input->GetMousePosition());
+	}
 }
 
 void Game::Update()
@@ -109,9 +114,9 @@ void Game::Draw()
 	RenderBackground();
 	DrawShape({ 0,0,0,255 }, 0, HEIGHT - 175, WIDTH, 8);
 	cannon->Draw();
-	fireButton->Draw(assets);
+	fireButton->Draw();
 	for (int i = 0; i < data.size(); i++)
 	{
-		data[i]->Draw(assets);
+		data[i]->DrawData();
 	}
 }

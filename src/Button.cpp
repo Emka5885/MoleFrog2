@@ -3,13 +3,13 @@
 #include "Definitions.h"
 #include "Render.h"
 
-Button::Button(Vector2 unhoverSize, Vector2 unhoverPosition, SDL_Color unhoverColor, SDL_Color outlineColor, const char* buttonText, int zoom) : unhoverSize(unhoverSize), unhoverPosition(unhoverPosition), unhoverColor(unhoverColor), outlineColor(outlineColor), buttonText(buttonText)
+Button::Button(Vector2 unhoverSize, SDL_Color unhoverColor, SDL_Color outlineColor, SDL_Color fontColor, const char* buttonText, TTF_Font* font, int zoom, Vector2 unhoverPosition) : unhoverSize(unhoverSize), unhoverPosition(unhoverPosition), unhoverColor(unhoverColor), outlineColor(outlineColor), fontColor(fontColor), buttonText(buttonText), font(font), zoom(zoom)
 {
 	collider = new Collider();
-	Init(zoom);
+	Init();
 }
 
-void Button::Init(int zoom)
+void Button::Init()
 {
 	buttonType = unhovered;
 
@@ -87,10 +87,28 @@ void Button::ChangeHover()
 
 void Button::SetClicked()
 {
-	buttonType = clicked;
+	if (zoom != 0)
+		buttonType = clicked;
 }
 
-void Button::Draw(AssetManager* assets)
+void Button::SetNewPosition(Vector2 unhoverPosition)
+{
+	this->unhoverPosition = unhoverPosition;
+
+	this->unhoverPosition.x -= unhoverSize.x / 2;
+	this->unhoverPosition.y -= unhoverSize.y / 2;
+
+	hoverPosition.x = this->unhoverPosition.x - zoom / 2;
+	hoverPosition.y = this->unhoverPosition.y - zoom / 2;
+
+
+	rect.x = this->unhoverPosition.x;
+	rect.y = this->unhoverPosition.y;
+	rect.w = unhoverSize.x;
+	rect.h = unhoverSize.y;
+}
+
+void Button::Draw()
 {
 	DrawShape(outlineColor, GetCurrentPosition().x - outline / 2,GetCurrentPosition().y - outline / 2, GetCurrentSize().x + outline,GetCurrentSize().y + outline);
 	DrawShape(GetCurrentColor(), GetCurrentPosition().x, GetCurrentPosition().y, GetCurrentSize().x, GetCurrentSize().y);
@@ -98,7 +116,7 @@ void Button::Draw(AssetManager* assets)
 	{
 		int textPosX = GetCurrentPosition().x + GetCurrentSize().x / 2 + outline / 2;
 		int textPosY = GetCurrentPosition().y + GetCurrentSize().y / 2 + outline / 2;
-		DrawTextForButtons(assets->GetFont(FIRE_FONT), { 255,0,0,255 }, buttonText, textPosX, textPosY);
+		DrawTextForButtons(font, fontColor, buttonText, textPosX, textPosY);
 	}
 }
 
@@ -112,7 +130,9 @@ SDL_Color Button::GetCurrentColor()
 	{
 		return hoverColor;
 	}
-	return clickColor;
+
+	if(zoom!=0)
+		return clickColor;
 }
 
 Vector2& Button::GetCurrentPosition()
