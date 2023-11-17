@@ -42,14 +42,6 @@ void Button::Init()
 	rect.h = unhoverSize.y;
 }
 
-void Button::CheckIfClicked(Vector2 mousePos)
-{
-	if (collider->CheckCollisionOfObjectAndPoint(rect, mousePos))
-	{
-		SetClicked();
-	}
-}
-
 void Button::CheckIfHovered(Vector2 mousePos)
 {
 	if (buttonType != clicked)
@@ -133,6 +125,8 @@ SDL_Color Button::GetCurrentColor()
 
 	if (changeColorWhenClicked)
 		return clickColor;
+
+	return unhoverColor;
 }
 
 Vector2& Button::GetCurrentPosition()

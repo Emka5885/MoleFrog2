@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AssetManager.cpp" />
+    <ClCompile Include="src\Bullet.cpp" />
     <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\Cannon.cpp" />
     <ClCompile Include="src\Collider.cpp" />
@@ -31,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetManager.h" />
+    <ClInclude Include="src\Bullet.h" />
     <ClInclude Include="src\Button.h" />
     <ClInclude Include="src\Cannon.h" />
     <ClInclude Include="src\Collider.h" />

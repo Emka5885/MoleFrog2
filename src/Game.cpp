@@ -38,13 +38,13 @@ void Game::Init()
 {
 	srand(time(NULL));
 
-	Data* d = new Data(assets, "Angle", 0, 90, 10, HEIGHT - 140, "in °");
+	Data* d = new Data(assets, angle, 0, 90, 45, 10, HEIGHT - 140);
 	data.emplace_back(d);
-	d = new Data(assets, "Initial Speed", 0, 100, 10, HEIGHT - 80, "in m/s");
+	d = new Data(assets, initialSpeed, 0, 100, 0, 10, HEIGHT - 80);
 	data.emplace_back(d);
-	d = new Data(assets, "Gravity", 0, 10, WIDTH / 2 - 100, HEIGHT - 140, "in m/s^2");
+	d = new Data(assets, gravity, 0, 10, 10, WIDTH / 2 - 100, HEIGHT - 140);
 	data.emplace_back(d);
-	d = new Data(assets, "Air Drag", 0, 10, WIDTH / 2 - 100, HEIGHT - 80, "in m/s^2");
+	d = new Data(assets, airDrag, 0, 10, 1, WIDTH / 2 - 100, HEIGHT - 80);
 	data.emplace_back(d);
 
 	RenderInit();
@@ -92,7 +92,10 @@ void Game::Input()
 		case SDL_MOUSEBUTTONDOWN:
 			if (event.button.button == SDL_BUTTON_LEFT)
 			{
-				fireButton->CheckIfClicked(input->GetMousePosition());
+				if (fireButton->GetIfClicked(input->GetMousePosition()))
+				{
+					cannon->Fire(assets, data);
+				}
 				mouseButtonClicked = true;
 			}
 			break;

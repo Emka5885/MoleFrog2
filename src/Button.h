@@ -32,7 +32,6 @@ public:
 	Button(Vector2 unhoverSize, SDL_Color unhoverColor, SDL_Color outlineColor, SDL_Color fontColor, const char* buttonText, TTF_Font* font, int zoom, Vector2 unhoverPosition = {0,0}, bool changeColorWhenClicked = false);
 
 	void Init();
-	void CheckIfClicked(Vector2 mousePos);
 	void CheckIfHovered(Vector2 mousePos);
 	void ChangeHover();
 	void SetClicked();

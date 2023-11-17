@@ -10,6 +10,7 @@ AssetManager::AssetManager()
 
 void AssetManager::InitTextures()
 {
+	LoadTexture(BULLET, BULLET_PATH);
 	LoadTexture(CANNON, CANNON_PATH);
 }
 

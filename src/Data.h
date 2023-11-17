@@ -1,11 +1,13 @@
 #pragma once
 #include "AssetManager.h"
 #include "Button.h"
+#include "Definitions.h"
 
 class Data
 {
 private:
 	AssetManager* assets;
+	DataTypes dataType;
 
 	const char* dataText;
 	const char* optionalText;
@@ -25,8 +27,9 @@ private:
 	void DrawRight();
 
 public:
-	Data(AssetManager* assets, const char* dataText, int minValue, int maxValue, int dataPosX, int dataPosY, const char* optionalText = "");
+	Data(AssetManager* assets, DataTypes dataType, int minValue, int maxValue, int initialValue, int dataPosX, int dataPosY);
 
+	void Init();
 	void SetNewValue(int newValue);
 	void DrawData();
 

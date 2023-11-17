@@ -1,14 +1,37 @@
 #include "Data.h"
 #include <algorithm>
-#include "Definitions.h"
 #include "Render.h"
 #include <string>
 
-Data::Data(AssetManager* assets, const char* dataText, int minValue, int maxValue, int dataPosX, int dataPosY, const char* optionalText) : assets(assets), dataText(dataText), minValue(minValue), maxValue(maxValue), dataPosX(dataPosX), dataPosY(dataPosY), optionalText(optionalText)
+Data::Data(AssetManager* assets, DataTypes dataType, int minValue, int maxValue, int initialValue, int dataPosX, int dataPosY) : assets(assets), dataType(dataType), minValue(minValue), maxValue(maxValue), dataPosX(dataPosX), dataPosY(dataPosY)
 {
 	left = new Button({ 32,32 }, { 255,255,255,255 }, { 0,0,0,255 }, { 0,0,0,255 }, "<", assets->GetFont(FONT), 2);
 	right = new Button({ 32,32 }, { 255,255,255,255 }, { 0,0,0,255 }, { 0,0,0,255 }, ">", assets->GetFont(FONT), 2);
-	SetNewValue(1);
+	SetNewValue(initialValue);
+	Init();
+}
+
+void Data::Init()
+{
+	switch (dataType)
+	{
+	case angle:
+		dataText = "Angle";
+		optionalText = "in °";
+		break;
+	case initialSpeed:
+		dataText = "Initial Speed";
+		optionalText = "in m/s";
+		break;
+	case gravity:
+		dataText = "Gravity";
+		optionalText = "in m/s^2";
+		break;
+	case airDrag:
+		dataText = "Air Drag";
+		optionalText = "in m/s^2";
+		break;
+	}
 }
 
 void Data::SetNewValue(int newValue)
