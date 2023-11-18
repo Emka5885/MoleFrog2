@@ -43,11 +43,11 @@ void Game::Init()
 
 	Data* d = new Data(assets, angle, 0, 90, 45, 10, HEIGHT - 140);
 	data.emplace_back(d);
-	d = new Data(assets, initialSpeed, 150, 250, 250, 10, HEIGHT - 80);
+	d = new Data(assets, initialSpeed, 150, 250, 225, 10, HEIGHT - 80);
 	data.emplace_back(d);
-	d = new Data(assets, gravity, 10, 50, 10, WIDTH / 2 - 100, HEIGHT - 140);
+	d = new Data(assets, gravity, 10, 50, 25, WIDTH / 2 - 100, HEIGHT - 140);
 	data.emplace_back(d);
-	d = new Data(assets, airDrag, 4, 20, 4, WIDTH / 2 - 100, HEIGHT - 80);
+	d = new Data(assets, airDrag, 4, 20, 5, WIDTH / 2 - 100, HEIGHT - 80);
 	data.emplace_back(d);
 
 	widgets->SetTextValue("0");
@@ -79,40 +79,43 @@ void Game::Loop()
 
 void Game::Input()
 {
+	SDL_Event event;
+	while (SDL_PollEvent(&event))
+	{
+		switch (event.type)
+		{
+		case SDL_QUIT:
+			quitt = true;
+			break;
+
+		case SDL_KEYDOWN:
+			if (event.key.keysym.sym == SDLK_ESCAPE)
+			{
+				quitt = true;
+			}
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+			if (event.button.button == SDL_BUTTON_LEFT && handleInput)
+			{
+				if (fireButton->GetIfClicked(input->GetMousePosition()))
+				{
+					cannon->Fire(assets, data);
+					handleInput = false;
+				}
+				mouseButtonClicked = true;
+			}
+			break;
+		case SDL_MOUSEBUTTONUP:
+			if (handleInput)
+			{
+				mouseButtonClicked = false;
+			}
+			break;
+		}
+	}
+
 	if (handleInput)
 	{
-		SDL_Event event;
-		while (SDL_PollEvent(&event))
-		{
-			switch (event.type)
-			{
-			case SDL_QUIT:
-				quitt = true;
-				break;
-
-			case SDL_KEYDOWN:
-				if (event.key.keysym.sym == SDLK_ESCAPE)
-				{
-					quitt = true;
-				}
-				break;
-			case SDL_MOUSEBUTTONDOWN:
-				if (event.button.button == SDL_BUTTON_LEFT)
-				{
-					if (fireButton->GetIfClicked(input->GetMousePosition()))
-					{
-						cannon->Fire(assets, data);
-						handleInput = false;
-					}
-					mouseButtonClicked = true;
-				}
-				break;
-			case SDL_MOUSEBUTTONUP:
-				mouseButtonClicked = false;
-				break;
-			}
-		}
-
 		if (mouseButtonClicked)
 		{
 			if (delayOfClickedMouseButton <= 0)
