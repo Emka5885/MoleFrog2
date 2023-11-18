@@ -1,23 +1,24 @@
 #pragma once
 #include <SDL_image.h>
-#include <vector>
 #include "AssetManager.h"
 #include "Bullet.h"
-#include "Data.h"
-
 class Cannon
 {
 private:
 	SDL_Texture* tex;
 	SDL_Rect rect;
+	int ang = 0;
+	SDL_Point center;
 
 	Bullet* bullet;
 
 public:
-	Cannon(SDL_Texture* tex);
+	Cannon(SDL_Texture* tex, int ang);
 
 	void Init();
-	void Fire(AssetManager* assets, std::vector<Data*> data);
+	void Fire(AssetManager* assets, int is, int grav, int ad);
+
+	void SetNewAngle(int a);
 
 	void Draw();
 

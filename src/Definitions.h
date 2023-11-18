@@ -14,6 +14,7 @@ constexpr const int CANNON_POSITION_X = 5;
 constexpr const int CANNON_POSITION_Y = HEIGHT - 240;
 constexpr const int CANNON_SIZE_X = 65;
 constexpr const int CANNON_SIZE_Y = 60;
+constexpr const int CANNON_ROTATION = 62;
 
 constexpr const int BULLET_SIZE = 21;
 

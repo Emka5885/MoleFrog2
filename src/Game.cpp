@@ -23,7 +23,7 @@ Game::Game()
 	input = new InputManager();
 	widgets = new Widgets(assets->GetFont(FONT), "distance (in m): ");
 	ground = new Ground({ 0,0,0,255 }, { 0, HEIGHT - 175 }, { WIDTH, 8 });
-	cannon = new Cannon(assets->GetTexture(CANNON));
+	cannon = new Cannon(assets->GetTexture(CANNON), 45);
 	fireButton = new Button({ 150,75 }, { 255,255,255,255 }, { 0,0,0,255 }, { 255,0,0,255 }, "FIRE!", assets->GetFont(FIRE_FONT), 4, { WIDTH - 200, HEIGHT - 90 }, true);
 
 	Init();
@@ -97,12 +97,30 @@ void Game::Input()
 		case SDL_MOUSEBUTTONDOWN:
 			if (event.button.button == SDL_BUTTON_LEFT && handleInput)
 			{
+				mouseButtonClicked = true;
 				if (fireButton->GetIfClicked(input->GetMousePosition()))
 				{
-					cannon->Fire(assets, data);
+					int is = 0, grav = 0, ad = 0;
+					for (int i = 0; i < data.size(); i++)
+					{
+						switch (data[i]->GetDataType())
+						{
+						case initialSpeed:
+							is = data[i]->GetValue();
+							break;
+						case gravity:
+							grav = data[i]->GetValue();
+							break;
+						case airDrag:
+							ad = data[i]->GetValue();
+							break;
+						}
+					}
+
+					cannon->Fire(assets, is, grav, ad);
 					handleInput = false;
+					mouseButtonClicked = false;
 				}
-				mouseButtonClicked = true;
 			}
 			break;
 		case SDL_MOUSEBUTTONUP:
@@ -123,6 +141,11 @@ void Game::Input()
 				for (int i = 0; i < data.size(); i++)
 				{
 					data[i]->CheckToSetNewValue(input->GetMousePosition());
+
+					if (data[i]->GetDataType() == angle)
+					{
+						cannon->SetNewAngle(data[i]->GetValue());
+					}
 				}
 
 				delayOfClickedMouseButton = 3;

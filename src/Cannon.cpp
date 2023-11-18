@@ -2,7 +2,7 @@
 #include "Definitions.h"
 #include "Render.h"
 
-Cannon::Cannon(SDL_Texture* tex) : tex(tex)
+Cannon::Cannon(SDL_Texture* tex, int ang) : tex(tex), ang(ang)
 {
 	Init();
 }
@@ -13,34 +13,21 @@ void Cannon::Init()
 	rect.y = CANNON_POSITION_Y;
 	rect.w = CANNON_SIZE_X;
 	rect.h = CANNON_SIZE_Y;
+
+	center = { rect.w / 2, rect.h / 2 };
 }
 
-void Cannon::Fire(AssetManager* assets, std::vector<Data*> data)
+void Cannon::Fire(AssetManager* assets, int is, int grav, int ad)
 {
 	if (bullet != nullptr)
 		delete bullet;
 
-	int ang, is, grav, ad;
-	for (int i = 0; i < data.size(); i++)
-	{
-		switch (data[i]->GetDataType())
-		{
-		case angle:
-			ang = data[i]->GetValue();
-			break;
-		case initialSpeed:
-			is = data[i]->GetValue();
-			break;
-		case gravity:
-			grav = data[i]->GetValue();
-			break;
-		case airDrag:
-			ad = data[i]->GetValue();
-			break;
-		}
-	}
+	bullet = new Bullet(assets->GetTexture(BULLET), { CANNON_POSITION_X + CANNON_SIZE_X / 2 - BULLET_SIZE / 2, CANNON_POSITION_Y + CANNON_SIZE_Y / 2 - BULLET_SIZE / 2 }, ang, is, grav, ad);
+}
 
-	bullet = new Bullet(assets->GetTexture(BULLET), { CANNON_POSITION_X + CANNON_SIZE_X - 21, CANNON_POSITION_Y + 3 }, ang, is, grav, ad);
+void Cannon::SetNewAngle(int a)
+{
+	ang = a;
 }
 
 void Cannon::Draw()
@@ -50,5 +37,5 @@ void Cannon::Draw()
 		bullet->Draw();
 	}
 
-	DrawObject(tex, rect.x, rect.y, rect.w, rect.h);
+	DrawCannon(tex, rect.x, rect.y, rect.w, rect.h, 90 - ang - CANNON_ROTATION, center);
 }

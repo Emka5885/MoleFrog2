@@ -57,6 +57,14 @@ void DrawObject(SDL_Texture* texture, int positionX, int positionY, int sizeX, i
 	SDL_RenderCopy(GetRenderer(), texture, NULL, &dsrect);
 }
 
+void DrawCannon(SDL_Texture* texture, int positionX, int positionY, int sizeX, int sizeY, int ang, SDL_Point& center)
+{
+	SDL_Rect srcRect = { 0, 0, 44, 31 };
+	SDL_Rect dsRect = { positionX, positionY, sizeX, sizeY };
+	assert(texture != nullptr && "Could not draw object, texture invalid!");
+	SDL_RenderCopyEx(GetRenderer(), texture, &srcRect, &dsRect, ang, &center, SDL_FLIP_NONE);
+}
+
 void DrawShape(SDL_Color color, int positionX, int positionY, int sizeX, int sizeY)
 {
 	SDL_Rect rect = { positionX, positionY, sizeX, sizeY };
