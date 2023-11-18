@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL_image.h>
+#include <vector>
 #include "AssetManager.h"
 #include "Bullet.h"
 #include "Data.h"
@@ -19,4 +20,6 @@ public:
 	void Fire(AssetManager* assets, std::vector<Data*> data);
 
 	void Draw();
+
+	Bullet* GetBullet() { return bullet; }
 };

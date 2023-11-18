@@ -3,6 +3,8 @@
 enum ButtonTypes { unhovered, hovered, clicked };
 enum DataTypes { angle, initialSpeed, gravity, airDrag };
 
+constexpr const double PI = 3.14159;
+
 constexpr const int WIDTH = 1400;
 constexpr const int HEIGHT = 700;
 

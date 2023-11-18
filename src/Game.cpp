@@ -20,6 +20,7 @@ Game::Game()
 
 	assets = new AssetManager();
 	input = new InputManager();
+	ground = new Ground({ 0,0,0,255 }, { 0, HEIGHT - 175 }, { WIDTH, 8 });
 	cannon = new Cannon(assets->GetTexture(CANNON));
 	fireButton = new Button({ 150,75 }, { 255,255,255,255 }, { 0,0,0,255 }, { 255,0,0,255 }, "FIRE!", assets->GetFont(FIRE_FONT), 4, { WIDTH - 200, HEIGHT - 90 }, true);
 
@@ -40,11 +41,11 @@ void Game::Init()
 
 	Data* d = new Data(assets, angle, 0, 90, 45, 10, HEIGHT - 140);
 	data.emplace_back(d);
-	d = new Data(assets, initialSpeed, 0, 100, 0, 10, HEIGHT - 80);
+	d = new Data(assets, initialSpeed, 150, 250, 250, 10, HEIGHT - 80);
 	data.emplace_back(d);
-	d = new Data(assets, gravity, 0, 10, 10, WIDTH / 2 - 100, HEIGHT - 140);
+	d = new Data(assets, gravity, 10, 50, 10, WIDTH / 2 - 100, HEIGHT - 140);
 	data.emplace_back(d);
-	d = new Data(assets, airDrag, 0, 10, 1, WIDTH / 2 - 100, HEIGHT - 80);
+	d = new Data(assets, airDrag, 4, 20, 4, WIDTH / 2 - 100, HEIGHT - 80);
 	data.emplace_back(d);
 
 	RenderInit();
@@ -63,7 +64,7 @@ void Game::Loop()
 		if (dt >= DESIRED_DT)
 		{
 			Input();
-			Update();
+			Update(dt);
 
 			lastTime = (float)SDL_GetTicks();
 		}
@@ -74,69 +75,80 @@ void Game::Loop()
 
 void Game::Input()
 {
-	SDL_Event event;
-	while (SDL_PollEvent(&event))
+	if (handleInput)
 	{
-		switch (event.type)
+		SDL_Event event;
+		while (SDL_PollEvent(&event))
 		{
-		case SDL_QUIT:
-			quitt = true;
-			break;
-
-		case SDL_KEYDOWN:
-			if (event.key.keysym.sym == SDLK_ESCAPE)
+			switch (event.type)
 			{
+			case SDL_QUIT:
 				quitt = true;
-			}
-			break;
-		case SDL_MOUSEBUTTONDOWN:
-			if (event.button.button == SDL_BUTTON_LEFT)
-			{
-				if (fireButton->GetIfClicked(input->GetMousePosition()))
+				break;
+
+			case SDL_KEYDOWN:
+				if (event.key.keysym.sym == SDLK_ESCAPE)
 				{
-					cannon->Fire(assets, data);
+					quitt = true;
 				}
-				mouseButtonClicked = true;
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				if (event.button.button == SDL_BUTTON_LEFT)
+				{
+					if (fireButton->GetIfClicked(input->GetMousePosition()))
+					{
+						cannon->Fire(assets, data);
+						handleInput = false;
+					}
+					mouseButtonClicked = true;
+				}
+				break;
+			case SDL_MOUSEBUTTONUP:
+				mouseButtonClicked = false;
+				break;
 			}
-			break;
-		case SDL_MOUSEBUTTONUP:
-			mouseButtonClicked = false;
-			break;
 		}
-	}
 
-	if (mouseButtonClicked)
-	{
-		if (delayOfClickedMouseButton <= 0)
+		if (mouseButtonClicked)
 		{
-			for (int i = 0; i < data.size(); i++)
+			if (delayOfClickedMouseButton <= 0)
 			{
-				data[i]->CheckToSetNewValue(input->GetMousePosition());
+				for (int i = 0; i < data.size(); i++)
+				{
+					data[i]->CheckToSetNewValue(input->GetMousePosition());
+				}
+
+				delayOfClickedMouseButton = 3;
 			}
-
-			delayOfClickedMouseButton = 3;
+			else
+			{
+				delayOfClickedMouseButton--;
+			}
 		}
-		else
+
+		fireButton->CheckIfHovered(input->GetMousePosition());
+		for (int i = 0; i < data.size(); i++)
 		{
-			delayOfClickedMouseButton--;
+			data[i]->CheckIfButtonsHover(input->GetMousePosition());
 		}
-	}
-
-	fireButton->CheckIfHovered(input->GetMousePosition());
-	for (int i = 0; i < data.size(); i++)
-	{
-		data[i]->CheckIfButtonsHover(input->GetMousePosition());
 	}
 }
 
-void Game::Update()
+void Game::Update(float dt)
 {
+	if (!handleInput)
+	{
+		if (!cannon->GetBullet()->GetIfHitGround(ground->GetRect()))
+		{
+			cannon->GetBullet()->CalculateNewPosition(dt);
+		}
+	}
 }
 
 void Game::Draw()
 {
 	RenderBackground();
-	DrawShape({ 0,0,0,255 }, 0, HEIGHT - 175, WIDTH, 8);
+	ground->Draw();
 	cannon->Draw();
 	fireButton->Draw();
 	for (int i = 0; i < data.size(); i++)

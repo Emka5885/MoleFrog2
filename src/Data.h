@@ -35,4 +35,7 @@ public:
 
 	void CheckIfButtonsHover(Vector2 mousePos);
 	void CheckToSetNewValue(Vector2 mousePos);
+
+	DataTypes GetDataType() { return dataType; }
+	int GetValue() { return currentValue; }
 };

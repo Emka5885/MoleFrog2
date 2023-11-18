@@ -20,7 +20,27 @@ void Cannon::Fire(AssetManager* assets, std::vector<Data*> data)
 	if (bullet != nullptr)
 		delete bullet;
 
-	bullet = new Bullet(assets->GetTexture(BULLET), { CANNON_POSITION_X + CANNON_SIZE_X - 21, CANNON_POSITION_Y + 3 }, data);
+	int ang, is, grav, ad;
+	for (int i = 0; i < data.size(); i++)
+	{
+		switch (data[i]->GetDataType())
+		{
+		case angle:
+			ang = data[i]->GetValue();
+			break;
+		case initialSpeed:
+			is = data[i]->GetValue();
+			break;
+		case gravity:
+			grav = data[i]->GetValue();
+			break;
+		case airDrag:
+			ad = data[i]->GetValue();
+			break;
+		}
+	}
+
+	bullet = new Bullet(assets->GetTexture(BULLET), { CANNON_POSITION_X + CANNON_SIZE_X - 21, CANNON_POSITION_Y + 3 }, ang, is, grav, ad);
 }
 
 void Cannon::Draw()

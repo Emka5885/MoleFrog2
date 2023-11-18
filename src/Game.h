@@ -5,6 +5,7 @@
 #include "Button.h"
 #include "Cannon.h"
 #include "Data.h"
+#include "Ground.h"
 
 class Game
 {
@@ -14,13 +15,14 @@ public:
 	void Init();
 	void Loop();
 	void Input();
-	void Update();
+	void Update(float dt);
 	void Draw();
 
 private:
 	AssetManager* assets;
 	InputManager* input;
 
+	Ground* ground;
 	Cannon* cannon;
 	Button* fireButton;
 
@@ -28,5 +30,6 @@ private:
 
 	int delayOfClickedMouseButton = 3;
 	bool mouseButtonClicked = false;
+	bool handleInput = true;
 	bool quitt = false;
 };
