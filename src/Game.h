@@ -6,6 +6,7 @@
 #include "Cannon.h"
 #include "Data.h"
 #include "Ground.h"
+#include "Widgets.h"
 
 class Game
 {
@@ -26,7 +27,14 @@ private:
 	Cannon* cannon;
 	Button* fireButton;
 
+	Widgets* widgets;
+
 	std::vector<Data*> data;
+
+	std::string distanceString;
+	const char* distanceText;
+
+	int delayNewFire = 180;
 
 	int delayOfClickedMouseButton = 3;
 	bool mouseButtonClicked = false;

@@ -30,6 +30,7 @@
     <ClCompile Include="src\InputManager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Render.cpp" />
+    <ClCompile Include="src\Widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\AssetManager.h" />
@@ -44,6 +45,7 @@
     <ClInclude Include="src\InputManager.h" />
     <ClInclude Include="src\Render.h" />
     <ClInclude Include="src\Vector2.h" />
+    <ClInclude Include="src\Widgets.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

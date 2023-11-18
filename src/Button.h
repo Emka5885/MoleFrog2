@@ -34,7 +34,7 @@ public:
 	void Init();
 	void CheckIfHovered(Vector2 mousePos);
 	void ChangeHover();
-	void SetClicked();
+	void SetClicked(bool ifClicked);
 	void SetNewPosition(Vector2 unhoverPosition);
 
 	void Draw();

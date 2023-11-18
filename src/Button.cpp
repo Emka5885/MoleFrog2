@@ -77,10 +77,17 @@ void Button::ChangeHover()
 	}
 }
 
-void Button::SetClicked()
+void Button::SetClicked(bool ifClicked)
 {
-	if(changeColorWhenClicked)
-		buttonType = clicked;
+	if (ifClicked)
+	{
+		if (changeColorWhenClicked)
+			buttonType = clicked;
+	}
+	else
+	{
+		buttonType = unhovered;
+	}
 }
 
 void Button::SetNewPosition(Vector2 unhoverPosition)
@@ -157,7 +164,7 @@ bool Button::GetIfClicked(Vector2 mousePos)
 {
 	if (collider->CheckCollisionOfObjectAndPoint(rect, mousePos))
 	{
-		SetClicked();
+		SetClicked(true);
 		return true;
 	}
 	return false;

@@ -1,7 +1,6 @@
 #include "Bullet.h"
 #include "Definitions.h"
 #include "Render.h"
-#include <iostream>
 
 Bullet::Bullet(SDL_Texture* tex, Vector2 initialPos, int ang, int is, int grav, int ad) : tex(tex), initialPos(initialPos), ang(ang), is(is), grav(grav), ad(ad)
 {
@@ -32,22 +31,26 @@ void Bullet::CalculateNewPosition(float dt)
 {
 	t += dt;
 
-	currentPos.x = initialPos.x + vx * t;
+	int newPosX = initialPos.x + vx * t;
+	if (newPosX > currentPos.x)
+	{
+		currentPos.x = newPosX;
+	}
 	currentPos.y = initialPos.y - vy * t + (grav+ad) * t * t / 2;
 	SetPositon();
 
 	vx -= ad * dt;
 	vy -= (grav+ad) * dt;
-
-	if (vx < 0)
-	{
-		vx = 0;
-	}
 }
 
 bool Bullet::GetIfHitGround(SDL_Rect& ground)
 {
 	return collider->CheckCollisionOfObjects(rect, ground);
+}
+
+int Bullet::GetDistanceTraveled()
+{
+	return currentPos.x - initialPos.x;
 }
 
 void Bullet::Draw()

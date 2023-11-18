@@ -22,7 +22,8 @@ public:
 	void SetPositon();
 	void CalculateNewPosition(float dt);
 
-	bool GetIfHitGround(SDL_Rect& ground);
-
 	void Draw();
+
+	bool GetIfHitGround(SDL_Rect& ground);
+	int GetDistanceTraveled();
 };

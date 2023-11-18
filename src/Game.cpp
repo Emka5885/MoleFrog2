@@ -4,6 +4,7 @@
 #include <ctime>
 #include <fstream>
 #include "Render.h"
+#include <iostream>
 
 Game::Game()
 {
@@ -20,6 +21,7 @@ Game::Game()
 
 	assets = new AssetManager();
 	input = new InputManager();
+	widgets = new Widgets(assets->GetFont(FONT), "distance (in m): ");
 	ground = new Ground({ 0,0,0,255 }, { 0, HEIGHT - 175 }, { WIDTH, 8 });
 	cannon = new Cannon(assets->GetTexture(CANNON));
 	fireButton = new Button({ 150,75 }, { 255,255,255,255 }, { 0,0,0,255 }, { 255,0,0,255 }, "FIRE!", assets->GetFont(FIRE_FONT), 4, { WIDTH - 200, HEIGHT - 90 }, true);
@@ -47,6 +49,8 @@ void Game::Init()
 	data.emplace_back(d);
 	d = new Data(assets, airDrag, 4, 20, 4, WIDTH / 2 - 100, HEIGHT - 80);
 	data.emplace_back(d);
+
+	widgets->SetTextValue("0");
 
 	RenderInit();
 }
@@ -138,10 +142,24 @@ void Game::Update(float dt)
 {
 	if (!handleInput)
 	{
+		distanceString = std::to_string(cannon->GetBullet()->GetDistanceTraveled());
+		distanceText = distanceString.c_str();
+		widgets->SetTextValue(distanceText);
 		if (!cannon->GetBullet()->GetIfHitGround(ground->GetRect()))
 		{
 			cannon->GetBullet()->CalculateNewPosition(dt);
 		}
+		else
+		{
+			delayNewFire--;
+		}
+	}
+
+	if (delayNewFire <= 0)
+	{
+		delayNewFire = 180;
+		handleInput = true;
+		fireButton->SetClicked(false);
 	}
 }
 
@@ -149,6 +167,7 @@ void Game::Draw()
 {
 	RenderBackground();
 	ground->Draw();
+	widgets->Draw();
 	cannon->Draw();
 	fireButton->Draw();
 	for (int i = 0; i < data.size(); i++)
